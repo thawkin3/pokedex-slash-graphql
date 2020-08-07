@@ -24,7 +24,7 @@ function App() {
       <Container>
         <img src={pokemonLogo} alt="" className={classes.pokemonLogo} />
         <Typography variant="srOnly">
-          <h1>Pokédex</h1>
+          <h1>Pokémon Pokédex</h1>
         </Typography>
         <Filters />
         <PokemonCardsList />
