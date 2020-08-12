@@ -48,7 +48,9 @@ export function PokemonCard({ pokemon, imgUrl }) {
         <Typography variant="h5" component="h2">
           {pokemon.name}
         </Typography>
-        <Typography color="textSecondary">{pokemon.type.join(', ')}</Typography>
+        <Typography color="textSecondary">
+          {pokemon.pokemonTypes.join(', ')}
+        </Typography>
       </CardContent>
       <CardActions className={classes.cardActions}>
         <FormControlLabel
