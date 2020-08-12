@@ -44,17 +44,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export function Filters() {
+export function Filters({
+  pokemonTypeFilter,
+  setPokemonTypeFilter,
+  capturedFilter,
+  setCapturedFilter,
+}) {
   const classes = useStyles()
-  const [pokemonType, setPokemonType] = React.useState('Any')
-  const [captured, setCaptured] = React.useState('Any')
 
   const handlePokemonTypeChange = (event) => {
-    setPokemonType(event.target.value)
+    setPokemonTypeFilter(event.target.value)
   }
 
   const handleCapturedChange = (event) => {
-    setCaptured(event.target.value)
+    setCapturedFilter(event.target.value)
   }
 
   return (
@@ -62,7 +65,7 @@ export function Filters() {
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel>Type</InputLabel>
         <Select
-          value={pokemonType}
+          value={pokemonTypeFilter}
           onChange={handlePokemonTypeChange}
           label="Type"
         >
@@ -77,7 +80,7 @@ export function Filters() {
       <FormControl variant="outlined" className={classes.formControl}>
         <InputLabel>Captured</InputLabel>
         <Select
-          value={captured}
+          value={capturedFilter}
           onChange={handleCapturedChange}
           label="Captured"
         >

@@ -1,0 +1,9 @@
+{
+  queryPokemon(filter: {pokemonTypes: {eq: [Grass]}}) {
+    id
+    name
+    captured
+    imgUrl
+    pokemonTypes
+  }
+}

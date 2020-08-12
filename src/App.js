@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography'
 import { Filters } from './Filters'
 import { PokemonCardsList } from './PokemonCardsList'
 import pokemonLogo from './pokemon-logo.png'
+import { fetchAllPokemon, fetchPokemonOfCertainType } from './graphQLUtils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +20,43 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles()
 
+  const [pokedexData, setPokedexData] = React.useState([])
+  const [pokemonTypeFilter, setPokemonTypeFilter] = React.useState('Any')
+  const [capturedFilter, setCapturedFilter] = React.useState('Any')
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      if (pokemonTypeFilter !== 'Any') {
+        const { errors, data } = await fetchPokemonOfCertainType(
+          pokemonTypeFilter
+        )
+
+        if (errors) {
+          console.error(errors)
+        }
+
+        const result = data.queryPokemon.sort(
+          (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
+        )
+        setPokedexData(result)
+      } else {
+        // Any type, Any captured status
+        const { errors, data } = await fetchAllPokemon()
+
+        if (errors) {
+          console.error(errors)
+        }
+
+        const result = data.queryPokemon.sort(
+          (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
+        )
+        setPokedexData(result)
+      }
+    }
+
+    fetchData()
+  }, [pokemonTypeFilter, capturedFilter])
+
   return (
     <main className={classes.root}>
       <Container>
@@ -26,8 +64,13 @@ function App() {
         <Typography variant="srOnly">
           <h1>Pokémon Pokédex</h1>
         </Typography>
-        <Filters />
-        <PokemonCardsList />
+        <Filters
+          pokemonTypeFilter={pokemonTypeFilter}
+          setPokemonTypeFilter={setPokemonTypeFilter}
+          capturedFilter={capturedFilter}
+          setCapturedFilter={setCapturedFilter}
+        />
+        <PokemonCardsList pokedexData={pokedexData} />
       </Container>
     </main>
   )

@@ -29,6 +29,26 @@ const fetchAllPokemonOperationsDoc = `
   }
 `
 
+const fetchPokemonOfCertainTypeOperationsDoc = (pokemonType) => `
+  query fetchPokemonOfCertainType {
+    queryPokemon(filter: {pokemonTypes: {eq: [${pokemonType}]}}) {
+      id
+      name
+      captured
+      imgUrl
+      pokemonTypes
+    }
+  }
+`
+
 export function fetchAllPokemon() {
   return fetchGraphQL(fetchAllPokemonOperationsDoc, 'fetchAllPokemon', {})
+}
+
+export function fetchPokemonOfCertainType(pokemonType) {
+  return fetchGraphQL(
+    fetchPokemonOfCertainTypeOperationsDoc(pokemonType),
+    'fetchPokemonOfCertainType',
+    {}
+  )
 }

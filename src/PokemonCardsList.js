@@ -2,7 +2,6 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import { PokemonCard } from './PokemonCard'
-import { fetchAllPokemon } from './graphQLUtils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,26 +16,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export function PokemonCardsList() {
+export function PokemonCardsList({ pokedexData }) {
   const classes = useStyles()
-  const [pokedexData, setPokedexData] = React.useState([])
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      const { errors, data } = await fetchAllPokemon()
-
-      if (errors) {
-        console.error(errors)
-      }
-
-      const result = data.queryPokemon.sort(
-        (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
-      )
-      setPokedexData(result)
-    }
-
-    fetchData()
-  }, [])
 
   return (
     <Grid container className={classes.root} spacing={2}>
