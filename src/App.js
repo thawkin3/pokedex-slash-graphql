@@ -5,7 +5,12 @@ import Typography from '@material-ui/core/Typography'
 import { Filters } from './Filters'
 import { PokemonCardsList } from './PokemonCardsList'
 import pokemonLogo from './pokemon-logo.png'
-import { fetchAllPokemon, fetchPokemonOfCertainType } from './graphQLUtils'
+import {
+  fetchAllPokemon,
+  fetchPokemonOfCertainType,
+  fetchPokemonByCapturedStatus,
+  fetchPokemonOfCertainTypeAndByCapturedStatus,
+} from './graphQLUtils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,9 +31,39 @@ function App() {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      if (pokemonTypeFilter !== 'Any') {
+      if (pokemonTypeFilter !== 'Any' && capturedFilter !== 'Any') {
+        const {
+          errors,
+          data,
+        } = await fetchPokemonOfCertainTypeAndByCapturedStatus({
+          pokemonType: pokemonTypeFilter,
+          isCaptured: capturedFilter === 'Captured',
+        })
+
+        if (errors) {
+          console.error(errors)
+        }
+
+        const result = data.queryPokemon.sort(
+          (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
+        )
+        setPokedexData(result)
+      } else if (pokemonTypeFilter !== 'Any') {
         const { errors, data } = await fetchPokemonOfCertainType(
           pokemonTypeFilter
+        )
+
+        if (errors) {
+          console.error(errors)
+        }
+
+        const result = data.queryPokemon.sort(
+          (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
+        )
+        setPokedexData(result)
+      } else if (capturedFilter !== 'Any') {
+        const { errors, data } = await fetchPokemonByCapturedStatus(
+          capturedFilter === 'Captured'
         )
 
         if (errors) {

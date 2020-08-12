@@ -1,5 +1,5 @@
 {
-  queryPokemon(filter: { pokemonTypes: { eq: [Grass] } }) {
+  queryPokemon(filter: { captured: true }) {
     id
     name
     captured
