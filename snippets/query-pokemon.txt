@@ -1,0 +1,9 @@
+{
+  queryPokemon {
+    id
+    name
+    captured
+    imgUrl
+    pokemonTypes
+  }
+}
