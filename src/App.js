@@ -2,6 +2,7 @@ import React from 'react'
 import Container from '@material-ui/core/Container'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
+import CircularProgress from '@material-ui/core/CircularProgress'
 import { Filters } from './Filters'
 import { PokemonCardsList } from './PokemonCardsList'
 import pokemonLogo from './pokemon-logo.png'
@@ -20,12 +21,24 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: '90%',
     width: 400,
   },
+  loadingContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: '#FFF',
+    fontSize: 24,
+    textTransform: 'uppercase',
+  },
+  loadingText: {
+    marginTop: theme.spacing(2),
+  },
 }))
 
 function App() {
   const classes = useStyles()
 
-  const [pokedexData, setPokedexData] = React.useState([])
+  const [pokedexData, setPokedexData] = React.useState(null)
   const [pokemonTypeFilter, setPokemonTypeFilter] = React.useState('Any')
   const [capturedFilter, setCapturedFilter] = React.useState('Any')
 
@@ -99,13 +112,22 @@ function App() {
         <Typography variant="srOnly">
           <h1>Pokémon Pokédex</h1>
         </Typography>
-        <Filters
-          pokemonTypeFilter={pokemonTypeFilter}
-          setPokemonTypeFilter={setPokemonTypeFilter}
-          capturedFilter={capturedFilter}
-          setCapturedFilter={setCapturedFilter}
-        />
-        <PokemonCardsList pokedexData={pokedexData} />
+        {pokedexData ? (
+          <>
+            <Filters
+              pokemonTypeFilter={pokemonTypeFilter}
+              setPokemonTypeFilter={setPokemonTypeFilter}
+              capturedFilter={capturedFilter}
+              setCapturedFilter={setCapturedFilter}
+            />
+            <PokemonCardsList pokedexData={pokedexData} />
+          </>
+        ) : (
+          <div className={classes.loadingContainer}>
+            <CircularProgress color="inherit" size={60} />
+            <Typography className={classes.loadingText}>Loading</Typography>
+          </div>
+        )}
       </Container>
     </main>
   )
