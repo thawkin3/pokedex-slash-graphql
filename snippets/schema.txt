@@ -20,7 +20,7 @@ enum PokemonType {
 }
 
 type Pokemon {
-  id: Int!
+  id: Int! @search
   name: String! @search(by: [fulltext])
   captured: Boolean! @search
   imgUrl: String!
