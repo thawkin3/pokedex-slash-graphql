@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
+
 import { updatePokemonCapturedStatus } from './graphQLUtils'
 
 const useStyles = makeStyles((theme) => ({
@@ -26,22 +27,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export function PokemonCard({ pokemon, imgUrl }) {
+export function PokemonCard({ pokemon, fetchPokedexData }) {
   const classes = useStyles()
 
-  const [isCaptured, setIsCaptured] = useState(pokemon.captured)
-
   const handleCapturedChange = async () => {
-    const { errors, data } = await updatePokemonCapturedStatus(
+    const { errors } = await updatePokemonCapturedStatus(
       pokemon.id,
-      !isCaptured
+      !pokemon.captured
     )
 
     if (errors) {
       console.error(errors)
     }
 
-    setIsCaptured(data.updatePokemon.pokemon[0].captured)
+    // Re-fetching all the data to make the top-level app aware of the data change.
+    // This was especially important in getting it to remove a Pokemon from the UI
+    // when the Captured filter was selected and then a previously captured Pokemon
+    // was toggled to no longer be captured.
+    fetchPokedexData()
   }
 
   return (
@@ -54,7 +57,11 @@ export function PokemonCard({ pokemon, imgUrl }) {
         >
           {pokemon.id}
         </Typography>
-        <img alt={pokemon.name} src={imgUrl} className={classes.avatar} />
+        <img
+          alt={pokemon.name}
+          src={pokemon.imgUrl}
+          className={classes.avatar}
+        />
         <Typography variant="h5" component="h2">
           {pokemon.name}
         </Typography>
@@ -66,7 +73,7 @@ export function PokemonCard({ pokemon, imgUrl }) {
         <FormControlLabel
           control={
             <Switch
-              checked={isCaptured}
+              checked={pokemon.captured}
               onChange={handleCapturedChange}
               name="captured"
               color="primary"

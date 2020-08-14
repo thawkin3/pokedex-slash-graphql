@@ -107,6 +107,7 @@ function fetchPokemonOfCertainTypeAndByCapturedStatus({
   )
 }
 
+// Fetch Pokemon
 // Combines all the cases into a nice single function serving as a facade over the underlying complexity
 export function fetchPokemon({ pokemonType, isCaptured }) {
   if (pokemonType !== 'Any' && isCaptured !== 'Any') {

@@ -9,7 +9,7 @@
 /coverage
 
 # production
-# /build
+# /build # I'm being lazy here and just including the built app in source control.
 
 # misc
 .DS_Store

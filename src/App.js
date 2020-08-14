@@ -3,6 +3,7 @@ import Container from '@material-ui/core/Container'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
 import CircularProgress from '@material-ui/core/CircularProgress'
+
 import { Filters } from './Filters'
 import { PokemonCardsList } from './PokemonCardsList'
 import pokemonLogo from './pokemon-logo.png'
@@ -37,26 +38,26 @@ export default function App() {
   const [pokemonTypeFilter, setPokemonTypeFilter] = React.useState('Any')
   const [capturedFilter, setCapturedFilter] = React.useState('Any')
 
-  React.useEffect(() => {
-    const fetchPokedexData = async () => {
-      const { errors, data } = await fetchPokemon({
-        pokemonType: pokemonTypeFilter,
-        isCaptured: capturedFilter,
-      })
+  const fetchPokedexData = React.useCallback(async () => {
+    const { errors, data } = await fetchPokemon({
+      pokemonType: pokemonTypeFilter,
+      isCaptured: capturedFilter,
+    })
 
-      if (errors) {
-        console.error(errors)
-      }
-
-      const result = data.queryPokemon.sort(
-        (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
-      )
-
-      setPokedexData(result)
+    if (errors) {
+      console.error(errors)
     }
 
-    fetchPokedexData()
+    const result = data.queryPokemon.sort(
+      (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
+    )
+
+    setPokedexData(result)
   }, [pokemonTypeFilter, capturedFilter])
+
+  React.useEffect(() => {
+    fetchPokedexData()
+  }, [fetchPokedexData])
 
   return (
     <main className={classes.root}>
@@ -73,7 +74,10 @@ export default function App() {
               capturedFilter={capturedFilter}
               setCapturedFilter={setCapturedFilter}
             />
-            <PokemonCardsList pokedexData={pokedexData} />
+            <PokemonCardsList
+              pokedexData={pokedexData}
+              fetchPokedexData={fetchPokedexData}
+            />
           </>
         ) : (
           <div className={classes.loadingContainer}>

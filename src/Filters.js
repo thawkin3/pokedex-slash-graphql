@@ -39,9 +39,6 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 300,
     background: '#FFF',
   },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
 }))
 
 export function Filters({

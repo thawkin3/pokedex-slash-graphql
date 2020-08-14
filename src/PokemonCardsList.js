@@ -2,6 +2,7 @@ import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
+
 import { PokemonCard } from './PokemonCard'
 
 const useStyles = makeStyles((theme) => ({
@@ -19,14 +20,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export function PokemonCardsList({ pokedexData }) {
+export function PokemonCardsList({ pokedexData, fetchPokedexData }) {
   const classes = useStyles()
 
   return pokedexData.length > 0 ? (
     <Grid container className={classes.root} spacing={2}>
       {pokedexData.map((pokemon) => (
         <Grid key={pokemon.name} item xs={12} sm={6} md={4} lg={3}>
-          <PokemonCard pokemon={pokemon} imgUrl={pokemon.imgUrl} />
+          <PokemonCard pokemon={pokemon} fetchPokedexData={fetchPokedexData} />
         </Grid>
       ))}
     </Grid>
