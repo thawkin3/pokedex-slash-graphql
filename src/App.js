@@ -6,12 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress'
 import { Filters } from './Filters'
 import { PokemonCardsList } from './PokemonCardsList'
 import pokemonLogo from './pokemon-logo.png'
-import {
-  fetchAllPokemon,
-  fetchPokemonOfCertainType,
-  fetchPokemonByCapturedStatus,
-  fetchPokemonOfCertainTypeAndByCapturedStatus,
-} from './graphQLUtils'
+import { fetchPokemon } from './graphQLUtils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -35,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-function App() {
+export default function App() {
   const classes = useStyles()
 
   const [pokedexData, setPokedexData] = React.useState(null)
@@ -43,66 +38,24 @@ function App() {
   const [capturedFilter, setCapturedFilter] = React.useState('Any')
 
   React.useEffect(() => {
-    const fetchData = async () => {
-      if (pokemonTypeFilter !== 'Any' && capturedFilter !== 'Any') {
-        const {
-          errors,
-          data,
-        } = await fetchPokemonOfCertainTypeAndByCapturedStatus({
-          pokemonType: pokemonTypeFilter,
-          isCaptured: capturedFilter === 'Captured',
-        })
+    const fetchPokedexData = async () => {
+      const { errors, data } = await fetchPokemon({
+        pokemonType: pokemonTypeFilter,
+        isCaptured: capturedFilter,
+      })
 
-        if (errors) {
-          console.error(errors)
-        }
-
-        const result = data.queryPokemon.sort(
-          (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
-        )
-        setPokedexData(result)
-      } else if (pokemonTypeFilter !== 'Any') {
-        const { errors, data } = await fetchPokemonOfCertainType(
-          pokemonTypeFilter
-        )
-
-        if (errors) {
-          console.error(errors)
-        }
-
-        const result = data.queryPokemon.sort(
-          (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
-        )
-        setPokedexData(result)
-      } else if (capturedFilter !== 'Any') {
-        const { errors, data } = await fetchPokemonByCapturedStatus(
-          capturedFilter === 'Captured'
-        )
-
-        if (errors) {
-          console.error(errors)
-        }
-
-        const result = data.queryPokemon.sort(
-          (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
-        )
-        setPokedexData(result)
-      } else {
-        // Any type, Any captured status
-        const { errors, data } = await fetchAllPokemon()
-
-        if (errors) {
-          console.error(errors)
-        }
-
-        const result = data.queryPokemon.sort(
-          (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
-        )
-        setPokedexData(result)
+      if (errors) {
+        console.error(errors)
       }
+
+      const result = data.queryPokemon.sort(
+        (pokemonA, pokemonB) => pokemonA.id - pokemonB.id
+      )
+
+      setPokedexData(result)
     }
 
-    fetchData()
+    fetchPokedexData()
   }, [pokemonTypeFilter, capturedFilter])
 
   return (
@@ -132,5 +85,3 @@ function App() {
     </main>
   )
 }
-
-export default App

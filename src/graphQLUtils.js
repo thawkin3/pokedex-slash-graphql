@@ -1,3 +1,4 @@
+// Main generic GraphQL request
 async function fetchGraphQL(operationsDoc, operationName, variables) {
   const result = await fetch(
     'https://pokedex.us-west-2.aws.cloud.dgraph.io/graphql',
@@ -17,6 +18,7 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
   return await result.json()
 }
 
+// Fetch all Pokemon
 const fetchAllPokemonOperationsDoc = `
   query fetchAllPokemon {
     queryPokemon {
@@ -29,10 +31,11 @@ const fetchAllPokemonOperationsDoc = `
   }
 `
 
-export function fetchAllPokemon() {
+function fetchAllPokemon() {
   return fetchGraphQL(fetchAllPokemonOperationsDoc, 'fetchAllPokemon', {})
 }
 
+// Fetch Pokemon by Type
 const fetchPokemonOfCertainTypeOperationsDoc = (pokemonType) => `
   query fetchPokemonOfCertainType {
     queryPokemon(filter: { pokemonTypes: { eq: [${pokemonType}] } }) {
@@ -45,7 +48,7 @@ const fetchPokemonOfCertainTypeOperationsDoc = (pokemonType) => `
   }
 `
 
-export function fetchPokemonOfCertainType(pokemonType) {
+function fetchPokemonOfCertainType(pokemonType) {
   return fetchGraphQL(
     fetchPokemonOfCertainTypeOperationsDoc(pokemonType),
     'fetchPokemonOfCertainType',
@@ -53,6 +56,7 @@ export function fetchPokemonOfCertainType(pokemonType) {
   )
 }
 
+// Fetch Pokemon by Captured Status
 const fetchPokemonByCapturedStatusOperationsDoc = (isCaptured) => `
   query fetchPokemonByCapturedStatus {
     queryPokemon(filter: { captured: ${isCaptured} }) {
@@ -65,7 +69,7 @@ const fetchPokemonByCapturedStatusOperationsDoc = (isCaptured) => `
   }
 `
 
-export function fetchPokemonByCapturedStatus(isCaptured) {
+function fetchPokemonByCapturedStatus(isCaptured) {
   return fetchGraphQL(
     fetchPokemonByCapturedStatusOperationsDoc(isCaptured),
     'fetchPokemonByCapturedStatus',
@@ -73,6 +77,7 @@ export function fetchPokemonByCapturedStatus(isCaptured) {
   )
 }
 
+// Fetch Pokemon by Type and by Captured Status
 const fetchPokemonOfCertainTypeAndByCapturedStatusOperationsDoc = ({
   pokemonType,
   isCaptured,
@@ -88,7 +93,7 @@ const fetchPokemonOfCertainTypeAndByCapturedStatusOperationsDoc = ({
   }
 `
 
-export function fetchPokemonOfCertainTypeAndByCapturedStatus({
+function fetchPokemonOfCertainTypeAndByCapturedStatus({
   pokemonType,
   isCaptured,
 }) {
@@ -102,6 +107,23 @@ export function fetchPokemonOfCertainTypeAndByCapturedStatus({
   )
 }
 
+// Combines all the cases into a nice single function serving as a facade over the underlying complexity
+export function fetchPokemon({ pokemonType, isCaptured }) {
+  if (pokemonType !== 'Any' && isCaptured !== 'Any') {
+    return fetchPokemonOfCertainTypeAndByCapturedStatus({
+      pokemonType,
+      isCaptured: isCaptured === 'Captured',
+    })
+  } else if (pokemonType !== 'Any') {
+    return fetchPokemonOfCertainType(pokemonType)
+  } else if (isCaptured !== 'Any') {
+    return fetchPokemonByCapturedStatus(isCaptured === 'Captured')
+  }
+
+  return fetchAllPokemon()
+}
+
+// Update the Pokemon Captured Status
 const updatePokemonCapturedStatusOperationsDoc = (
   pokemonId,
   newIsCapturedValue
