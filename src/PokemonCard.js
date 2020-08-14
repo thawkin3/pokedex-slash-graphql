@@ -6,6 +6,7 @@ import CardContent from '@material-ui/core/CardContent'
 import Typography from '@material-ui/core/Typography'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Switch from '@material-ui/core/Switch'
+import { updatePokemonCapturedStatus } from './graphQLUtils'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,10 +29,19 @@ const useStyles = makeStyles((theme) => ({
 export function PokemonCard({ pokemon, imgUrl }) {
   const classes = useStyles()
 
-  const [isCaptured, setIsCaptured] = useState(false)
+  const [isCaptured, setIsCaptured] = useState(pokemon.captured)
 
-  const handleCapturedChange = () => {
-    setIsCaptured((isCaptured) => !isCaptured)
+  const handleCapturedChange = async () => {
+    const { errors, data } = await updatePokemonCapturedStatus(
+      pokemon.id,
+      !isCaptured
+    )
+
+    if (errors) {
+      console.error(errors)
+    }
+
+    setIsCaptured(data.updatePokemon.pokemon[0].captured)
   }
 
   return (
