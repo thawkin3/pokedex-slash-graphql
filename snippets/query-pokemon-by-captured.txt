@@ -1,4 +1,4 @@
-{
+query GetAllCapturedPokemon {
   queryPokemon(filter: { captured: true }) {
     id
     name

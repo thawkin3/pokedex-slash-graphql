@@ -1,4 +1,4 @@
-{
+query GetAllCapturedGrassPokemon {
   queryPokemon(filter: { captured: true, pokemonTypes: { eq: [Grass] } }) {
     id
     name
