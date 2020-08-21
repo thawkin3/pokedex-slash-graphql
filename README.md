@@ -1,6 +1,6 @@
-# Pokedex with Slash GraphQL
+# Pokédex with Slash GraphQL
 
-Pokedex React app implemented with a Slash GraphQL backend.
+Pokédex React app implemented with a Slash GraphQL backend.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -1,6 +1,6 @@
 {
   "name": "pokedex-slash-graphql",
-  "description": "Pokedex React app implemented with a Slash GraphQL backend",
+  "description": "Pokédex React app implemented with a Slash GraphQL backend",
   "version": "0.1.0",
   "private": true,
   "homepage": "http://tylerhawkins.info/pokedex-slash-graphql/build",
