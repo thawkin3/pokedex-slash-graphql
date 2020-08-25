@@ -21,6 +21,10 @@ body {
   padding: 0 2rem 2rem 2rem;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
