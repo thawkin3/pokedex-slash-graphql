@@ -4,7 +4,7 @@ Pokédex React app implemented with a Slash GraphQL backend.
 
 Demo app: http://tylerhawkins.info/pokedex-slash-graphql/build/
 
-Article tutorial: https://levelup.gitconnected.com/how-to-build-a-pok%C3%A9dex-react-app-with-a-slash-graphql-backend-ccc8c650d29b?sk=532567df8e39797bbc63bafbb98a1a9a
+Article tutorial: https://levelup.gitconnected.com/how-to-build-a-pokédex-react-app-with-a-slash-graphql-backend-ccc8c650d29b?sk=532567df8e39797bbc63bafbb98a1a9a
 
 ## Scripts for Local Development
 
@@ -15,7 +15,7 @@ Article tutorial: https://levelup.gitconnected.com/how-to-build-a-pok%C3%A9dex-r
 - `yarn start`: Starts the development server on port 3000
 - `yarn test`: Runs the tests
 
-## Resources:
+## Resources
 
 - [React](https://reactjs.org/)
 - [GraphQL](https://graphql.org/)
